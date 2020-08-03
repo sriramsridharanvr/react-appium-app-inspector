@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { AddCircleOutline, CheckCircleOutline } from "@material-ui/icons";
 import { Button, IconButton } from "@material-ui/core";
-
 const spyContainerStyle = {
   margin: "0px 0px",
   zIndex: 9999,
@@ -13,9 +12,12 @@ const spyContainerStyle = {
 
 const SpyContainer = ({
   elements,
-  currentElement,
   dimensions,
   deviceDimensions,
+  hoverElement,
+  onSelect,
+  onDeselect,
+  onHover,
 }) => {
   const [spyElement, setSpyElement] = useState(null);
   const [scaleRatio, setScaleRatio] = useState(1);
@@ -39,17 +41,24 @@ const SpyContainer = ({
         width: `${dimensions ? dimensions.width : 400}px`,
         height: `${dimensions ? dimensions.height : 800}px`,
       }}
-      onMouseOut={() => setSpyElement(null)}
+      onMouseOut={() => onHover(null)}
     >
       {elements &&
         elements.map((element) => (
           <ElementHighlighter
+            key={element.elementId}
             element={element}
             scaleRatio={scaleRatio}
-            active={spyElement && spyElement.elementId === element.elementId}
-            onHover={(element) => {
-              setSpyElement(element);
-            }}
+            // active={spyElement && spyElement.elementId === element.elementId}
+            // onHover={(element) => {
+            //   setSpyElement(element);
+            // }}
+            active={
+              hoverElement && hoverElement.elementId === element.elementId
+            }
+            onHover={onHover}
+            onSelected={onSelect}
+            onDeSelected={onDeselect}
           />
         ))}
     </div>
@@ -98,6 +107,8 @@ const ElementHighlighter = ({
   onHover,
   scaleRatio,
   selected,
+  onSelected,
+  onDeSelected,
 }) => {
   const [left, setLeft] = useState(0);
   const [top, setTop] = useState(0);
@@ -155,13 +166,17 @@ const ElementHighlighter = ({
           onHover(element);
         }}
       ></div>
-      {selected ? (
+      {element.selectedByUser ? (
         <IconButton
           size="small"
           style={elementButtonStyle}
-          color="secondary"
+          variant="contained"
+          color="primary"
           onMouseOver={() => {
             onHover(element);
+          }}
+          onClick={() => {
+            onDeSelected(element);
           }}
         >
           <CheckCircleOutline />
@@ -169,10 +184,14 @@ const ElementHighlighter = ({
       ) : (
         <IconButton
           size="small"
+          variant="contained"
           style={elementButtonStyle}
-          color="primary"
+          color="secondary"
           onMouseOver={() => {
             onHover(element);
+          }}
+          onClick={() => {
+            onSelected(element);
           }}
         >
           <AddCircleOutline />

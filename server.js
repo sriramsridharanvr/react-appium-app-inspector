@@ -72,10 +72,10 @@ app.get("/pagesource/:sessionId", async (req, res) => {
       xml: resopnse.data.value,
     };
 
-    let dom = xmlParser.parseString(resopnse.data.value, (err, result) => {
-      //console.log(JSON.stringify(result));
-      if (err) console.error(err);
-    });
+    // let dom = xmlParser.parseString(resopnse.data.value, (err, result) => {
+    //   //console.log(JSON.stringify(result));
+    //   if (err) console.error(err);
+    // });
 
     const screenshotUrl = `${APPIUM_URL}/session/${sessionId}/screenshot`;
     const screenshotResponse = await axios.get(screenshotUrl);

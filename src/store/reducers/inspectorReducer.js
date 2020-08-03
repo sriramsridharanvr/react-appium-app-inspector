@@ -5,6 +5,8 @@ import {
   CLOSE_SESSION,
   INSPECTOR_ERROR,
   SCAN,
+  SELECT_ELEMENT,
+  DESELECT_ELEMENT,
   SET_CURRENT_ELEMENT,
   FILTER_ELEMENTS,
   SPY_ELEMENT,
@@ -19,6 +21,7 @@ const initialState = {
   filteredElements: [],
   spyElement: null,
   currentElement: null,
+  selectedElements: [],
   filter: null,
   masterDimensions: null,
   loading: false,
@@ -81,6 +84,20 @@ export default (state = initialState, action) => {
         filter: null,
         error: null,
         loading: false,
+      };
+
+    case SELECT_ELEMENT:
+      return {
+        ...state,
+        selectedElements: [...state.selectedElements, action.payload],
+      };
+
+    case DESELECT_ELEMENT:
+      return {
+        ...state,
+        selectedElements: state.selectedElements.filter(
+          (ele) => ele.elementId !== action.payload.elementId
+        ),
       };
   }
 };

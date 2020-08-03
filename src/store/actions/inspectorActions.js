@@ -9,6 +9,8 @@ import {
   SPY_ELEMENT,
   SET_LOADING,
   INSPECTOR_ERROR,
+  SELECT_ELEMENT,
+  DESELECT_ELEMENT,
 } from "../types";
 
 import axios from "axios";
@@ -75,6 +77,9 @@ const parseNode = (key, node, elements) => {
 
   element.attributes = getAttributes(node);
   element.elementId = uuid.v4();
+  element.label = element.attributes["resource-id"]
+    ? element.attributes["resource-id"]
+    : element.attributes.class;
   elements.push(element);
   Object.keys(node).forEach((key) => {
     if (key !== "$") {
@@ -113,4 +118,18 @@ export const scan = (sessionId) => async (dispatch) => {
       payload: "Could not scan at this time",
     });
   }
+};
+
+export const selectElement = (element) => (dispatch) => {
+  dispatch({
+    type: SELECT_ELEMENT,
+    payload: element,
+  });
+};
+
+export const deSelectElement = (element) => (dispatch) => {
+  dispatch({
+    type: DESELECT_ELEMENT,
+    payload: element,
+  });
 };
