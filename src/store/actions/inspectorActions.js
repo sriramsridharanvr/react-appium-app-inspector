@@ -99,6 +99,9 @@ const getAttributes = (element) => {
 };
 
 export const scan = (sessionId) => async (dispatch) => {
+  dispatch({
+    type: SET_LOADING,
+  });
   try {
     const res = await axios.get(`/pagesource/${sessionId}`);
     let dom = xmlParser.parseString(res.data.xml, (err, result) => {

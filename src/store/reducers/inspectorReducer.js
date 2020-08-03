@@ -99,5 +99,11 @@ export default (state = initialState, action) => {
           (ele) => ele.elementId !== action.payload.elementId
         ),
       };
+
+    case SET_LOADING:
+      return {
+        ...state,
+        loading: true,
+      };
   }
 };
